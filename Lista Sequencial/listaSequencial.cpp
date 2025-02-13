@@ -22,7 +22,7 @@ int main(){
         
         hud();
         std::cin >> opcao;
-        if(opcao == 9) {
+        if(opcao == 8) {
             break;
         }
         switch(opcao){
@@ -39,7 +39,7 @@ int main(){
                     std::cout << "A lista esta cheia\n" << std::endl;
                 }
                 else{
-                    std::cout << "A lista não esta cheia\n" << std::endl;
+                    std::cout << "A lista nao esta cheia\n" << std::endl;
                 }
                 break;
             case 3:

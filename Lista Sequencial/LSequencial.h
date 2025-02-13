@@ -4,7 +4,7 @@
 
 class listaSequencial{
     private:
-        int lista[100];
+        int lista[100] = {0};
         int tamanhoAtual;
         int tamanhoMaximo;
 
@@ -15,8 +15,8 @@ class listaSequencial{
         bool listaCheia();
         int tamanhoLista();
         int elementoLista(int posicao);
-        void modificarElemento(int posicao, int valor);
-        void inserirElemento(int posicao, int valor);
+        bool modificarElemento(int posicao, int valor);
+        bool inserirElemento(int posicao, int valor);
         int removerElemento(int posicao);
 };
 
@@ -53,49 +53,48 @@ int listaSequencial::tamanhoLista(){
 }
 
 int listaSequencial::elementoLista(int posicao){
-    if (posicao >= 0 && posicao <= tamanhoAtual){
-        return lista[posicao];
-    }
-    else{
+    if((posicao > tamanhoAtual) || (posicao <= 0)){
         return -1;
     }
-}
-
-void listaSequencial::modificarElemento(int posicao, int valor){
-    if (posicao >= 0 && posicao <= tamanhoAtual){
-        lista[posicao] = valor;
+    else {
+        return lista[posicao-1];
     }
 }
 
-void listaSequencial::inserirElemento(int posicao, int valor){
-    if (posicao >= 0 && posicao <= tamanhoAtual){
-        if (tamanhoAtual < tamanhoMaximo){
-            for (int i = tamanhoAtual; i >= posicao; i--){
-                lista[(i+1)] = lista[i];
-            }
-            lista[(posicao+1)] = valor;
-            tamanhoAtual++;
-        }
+bool listaSequencial::modificarElemento(int posicao, int valor){
+    if((posicao > tamanhoAtual) || (posicao <= 0)){
+        return false;
     }
+    else {
+        lista[posicao-1] = valor;
+        return true;
+    }
+}
+
+bool listaSequencial::inserirElemento(int posicao, int valor){
+    if((tamanhoAtual == tamanhoMaximo) || (posicao <= 0) || (posicao > tamanhoAtual+1)) {
+        return false;
+    }
+    
+    for (int i = tamanhoAtual; i >= posicao; i--){
+        lista[i] = lista[(i-1)];
+    }
+    lista[posicao - 1] = valor;
+    tamanhoAtual++;
+    return true;
+
 }
 
 int listaSequencial::removerElemento(int posicao){
-    if (posicao >= 0 && posicao <= tamanhoAtual){
-        int valor = lista[posicao];
-        for (int i = posicao; i < tamanhoAtual; i++){
-            lista[i] = lista[(i+1)];
-        }
-        tamanhoAtual--;
-        return valor;
-    }
-    else{
+    if (posicao > tamanhoAtual || posicao <= 0){
         return -1;
     }
-}
 
-void setListaVazia(){
-    
+    for (int i = (posicao-1); i < tamanhoAtual; i++){
+        lista[i] = lista[i+1];
+    }
+    tamanhoAtual--;
+    return lista[posicao-1];
 }
-
 
 #endif
