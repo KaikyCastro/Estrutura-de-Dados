@@ -4,7 +4,7 @@
 
 class listaSequencial{
     private:
-        int lista[100] = {0};
+        int lista[100];
         int tamanhoAtual;
         int tamanhoMaximo;
 
@@ -91,6 +91,10 @@ int listaSequencial::removerElemento(int posicao){
     else{
         return -1;
     }
+}
+
+void setListaVazia(){
+    
 }
 
 
