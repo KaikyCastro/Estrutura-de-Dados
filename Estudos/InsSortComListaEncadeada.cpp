@@ -1,7 +1,6 @@
 #include <iostream>
 
 using namespace std;
-
 class No {
     private:
         int dado;
@@ -32,7 +31,7 @@ void No::setProx(No *prox) {
     this->prox = prox;
 }
 
-class ListaEncadeada2{
+class ListaEncadeada2 {
     private:
         No *cabeca = NULL;
         int tamanho = 0;
@@ -52,14 +51,31 @@ class ListaEncadeada2{
         void removerElemento(int pos);
         int obterElemento(int pos);
         void modificarElemento(int pos, int dado);
+        void insertionSort();
 };
 
 void ListaEncadeada2::insereInicio(int dado) {
     No *novo = new No();
     novo->setDado(dado);
     novo->setProx(cabeca);
-    this->cabeca = novo;
-    this->tamanho++;
+    cabeca = novo;
+    tamanho++;
+}
+
+void ListaEncadeada2::insereFim(int dado) {
+    No *novo = new No();
+    novo->setDado(dado);
+
+    if(vazia()) {
+        cabeca = novo;
+    } else {
+        No *aux = cabeca;
+        while(aux->getProx() != NULL) {
+            aux = aux->getProx();
+        }
+        aux->setProx(novo);
+    }
+    tamanho++;
 }
 
 void ListaEncadeada2::insereMeio(int pos, int dado) {
@@ -76,27 +92,14 @@ void ListaEncadeada2::insereMeio(int pos, int dado) {
 
     novo->setProx(aux->getProx());
     aux->setProx(novo);
-    this->tamanho++;
-}
-
-void ListaEncadeada2::insereFim(int dado) {
-    No *novo = new No();
-    novo->setDado(dado);
-
-    No *aux = cabeca;
-    while(aux->getProx() != NULL) {
-        aux = aux->getProx();
-    }
-    novo->setProx(NULL);
-    aux->setProx(novo);
-    this->tamanho++;
+    tamanho++;
 }
 
 void ListaEncadeada2::removeInicio() {
     No *aux = cabeca;
-    cabeca = cabeca->getProx();
+    cabeca = aux->getProx();
     delete aux;
-    this->tamanho--;
+    tamanho--;
 }
 
 void ListaEncadeada2::removeNaLista(int pos) {
@@ -112,11 +115,12 @@ void ListaEncadeada2::removeNaLista(int pos) {
 
     Antecessor->setProx(atual->getProx());
     delete atual;
-    this->tamanho--;
+    tamanho--;
 
 }
+
 int ListaEncadeada2::vazia() {
-    if(this->tamanho == 0) {
+    if(this->cabeca == NULL) {
         return -1;
     } else {
         return 0;
@@ -150,21 +154,6 @@ void ListaEncadeada2::removerElemento(int pos) {
     }
 }
 
-int ListaEncadeada2::obterElemento(int pos) {
-    if(vazia() || pos <=0 || pos > this->tamanho) {
-        return -1;
-    } else {
-        No *aux = cabeca;
-        int cont = 1;
-
-        while(cont < pos) {
-            aux = aux->getProx();
-            cont++;
-        }
-        return aux->getDado();
-    }
-}
-
 void ListaEncadeada2::modificarElemento(int pos, int dado) {
     if(vazia() || pos <=0 || pos > this->tamanho) {
         cout << "Erro ao modificar elemento" << endl;
@@ -180,22 +169,35 @@ void ListaEncadeada2::modificarElemento(int pos, int dado) {
     }
 }
 
+void ListaEncadeada2::insertionSort() {
+    for(int i = 1; i < this->tamanho; i++) {
+        int j = i;
+        while(j > 0 && obterElemento(j) < obterElemento(j-1)) {
+            int aux = obterElemento(j);
+            modificarElemento(j, obterElemento(j-1));
+            modificarElemento(j-1, aux);
+            j--;
+        }
+    }
+
+}
+
 void hud() {
     cout << "1 - Inserir elemento" << endl;
     cout << "2 - Remover elemento" << endl;
-    cout << "3 - Modificar elemento" << endl;
-    cout << "4 - Obter elemento" << endl;
+    cout << "3 - Obter elemento" << endl;
+    cout << "4 - Modificar elemento" << endl;
     cout << "5 - Tamanho da lista" << endl;
-    cout << "6 - Sair" << endl;
+    cout << "6 - Ordenar lista" << endl;
+    cout << "7 - Sair" << endl;
     cout << "Digite a opção: ";
 }
 
 int main() {
-
     ListaEncadeada2 *lista = new ListaEncadeada2();
     int opcao = 0;
 
-    while(opcao != 6) {
+    while(opcao != 7) {
         hud();
         cin >> opcao;
 
@@ -217,15 +219,6 @@ int main() {
                 break;
             }
             case 3: {
-                int pos, dado;
-                cout << "Digite a posição: ";
-                cin >> pos;
-                cout << "Digite o dado: ";
-                cin >> dado;
-                lista->modificarElemento(pos, dado);
-                break;
-            }
-            case 4: {
                 int pos;
                 cout << "Digite a posição: ";
                 cin >> pos;
@@ -237,15 +230,25 @@ int main() {
                 }
                 break;
             }
+            case 4: {
+                int pos, dado;
+                cout << "Digite a posição: ";
+                cin >> pos;
+                cout << "Digite o dado: ";
+                cin >> dado;
+                lista->modificarElemento(pos, dado);
+                break;
+            }
             case 5: {
                 cout << "Tamanho da lista: " << lista->tamanhoLista() << endl;
+                break;
+            }
+            case 6: {
+                lista->insertionSort();
                 break;
             }
         }
     }
 
-    delete lista;
-    
-
     return 0;
-} 
+}
