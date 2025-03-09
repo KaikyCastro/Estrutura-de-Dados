@@ -31,7 +31,7 @@ void No::setProx(No *prox) {
     this->prox = prox;
 }
 
-class ListaEncadeada2 {
+class ListaEncadeada {
     private:
         No *cabeca = NULL;
         int tamanho = 0;
@@ -42,7 +42,7 @@ class ListaEncadeada2 {
         void removeNaLista(int pos);
 
     public:
-        ListaEncadeada2() {
+        ListaEncadeada() {
             this->cabeca = NULL;
         }
         int vazia();
@@ -51,10 +51,9 @@ class ListaEncadeada2 {
         void removerElemento(int pos);
         int obterElemento(int pos);
         void modificarElemento(int pos, int dado);
-        void insertionSort();
 };
 
-void ListaEncadeada2::insereInicio(int dado) {
+void ListaEncadeada::insereInicio(int dado) {
     No *novo = new No();
     novo->setDado(dado);
     novo->setProx(cabeca);
@@ -62,7 +61,7 @@ void ListaEncadeada2::insereInicio(int dado) {
     tamanho++;
 }
 
-void ListaEncadeada2::insereFim(int dado) {
+void ListaEncadeada::insereFim(int dado) {
     No *novo = new No();
     novo->setDado(dado);
 
@@ -78,7 +77,7 @@ void ListaEncadeada2::insereFim(int dado) {
     tamanho++;
 }
 
-void ListaEncadeada2::insereMeio(int pos, int dado) {
+void ListaEncadeada::insereMeio(int pos, int dado) {
     No *novo = new No();
     novo->setDado(dado);
 
@@ -95,14 +94,14 @@ void ListaEncadeada2::insereMeio(int pos, int dado) {
     tamanho++;
 }
 
-void ListaEncadeada2::removeInicio() {
+void ListaEncadeada::removeInicio() {
     No *aux = cabeca;
     cabeca = aux->getProx();
     delete aux;
     tamanho--;
 }
 
-void ListaEncadeada2::removeNaLista(int pos) {
+void ListaEncadeada::removeNaLista(int pos) {
     No *atual = NULL, *Antecessor = NULL;
     int cont = 1;
 
@@ -119,7 +118,7 @@ void ListaEncadeada2::removeNaLista(int pos) {
 
 }
 
-int ListaEncadeada2::vazia() {
+int ListaEncadeada::vazia() {
     if(this->cabeca == NULL) {
         return -1;
     } else {
@@ -127,11 +126,11 @@ int ListaEncadeada2::vazia() {
     }
 }
 
-int ListaEncadeada2::tamanhoLista() {
+int ListaEncadeada::tamanhoLista() {
     return this->tamanho;
 }
 
-void ListaEncadeada2::inserirElemento(int pos, int dado) {
+void ListaEncadeada::inserirElemento(int pos, int dado) {
     if (pos <=0 || pos > this->tamanho+1) {
         cout << "Erro ao inserir elemento" << endl;
     } else if (pos == 1) {
@@ -144,7 +143,7 @@ void ListaEncadeada2::inserirElemento(int pos, int dado) {
 
 }
 
-void ListaEncadeada2::removerElemento(int pos) {
+void ListaEncadeada::removerElemento(int pos) {
     if (pos <=0 || pos > this->tamanho) {
         cout << "Erro ao remover elemento" << endl;
     } else if (pos == 1) {
@@ -154,7 +153,22 @@ void ListaEncadeada2::removerElemento(int pos) {
     }
 }
 
-void ListaEncadeada2::modificarElemento(int pos, int dado) {
+int ListaEncadeada::obterElemento(int pos) {
+    if(vazia() || pos <=0 || pos > this->tamanho) {
+        return -1;
+    } else {
+        No *aux = cabeca;
+        int cont = 1;
+
+        while((cont < pos) && (aux->getProx() != NULL)) {
+            aux = aux->getProx();
+            cont++;
+        }
+        return aux->getDado();
+    }
+}
+
+void ListaEncadeada::modificarElemento(int pos, int dado) {
     if(vazia() || pos <=0 || pos > this->tamanho) {
         cout << "Erro ao modificar elemento" << endl;
     } else {
@@ -169,17 +183,22 @@ void ListaEncadeada2::modificarElemento(int pos, int dado) {
     }
 }
 
-void ListaEncadeada2::insertionSort() {
-    for(int i = 1; i < this->tamanho; i++) {
-        int j = i;
-        while(j > 0 && obterElemento(j) < obterElemento(j-1)) {
-            int aux = obterElemento(j);
-            modificarElemento(j, obterElemento(j-1));
-            modificarElemento(j-1, aux);
+void insertionSort(ListaEncadeada *lista) {
+    int aux, j;
+    for(int i = 1; i < lista->tamanhoLista(); i++) {
+        aux = lista->obterElemento(i);
+        j = i - 1;
+
+        while(j >= 0 && lista->obterElemento(j) > aux) {
+            lista->modificarElemento(j+1, lista->obterElemento(j));
             j--;
         }
+        lista->modificarElemento(j+1, aux);
     }
 
+    for(int i = 1; i <= lista->tamanhoLista(); i++) {
+        cout << lista->obterElemento(i) << " ";
+    }
 }
 
 void hud() {
@@ -194,7 +213,7 @@ void hud() {
 }
 
 int main() {
-    ListaEncadeada2 *lista = new ListaEncadeada2();
+    ListaEncadeada *lista = new ListaEncadeada();
     int opcao = 0;
 
     while(opcao != 7) {
@@ -244,7 +263,7 @@ int main() {
                 break;
             }
             case 6: {
-                lista->insertionSort();
+                insertionSort(lista);
                 break;
             }
         }

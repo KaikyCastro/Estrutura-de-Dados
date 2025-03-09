@@ -69,6 +69,7 @@ int Pilha::pop() {
     }
 }
 
+
 void hud() {
     cout << "1 - Inserir elemento" << endl;
     cout << "2 - Remover elemento" << endl;
