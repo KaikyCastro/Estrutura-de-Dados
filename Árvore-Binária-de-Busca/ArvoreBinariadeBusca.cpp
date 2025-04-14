@@ -9,11 +9,20 @@ ArvoreBinariadeBusca::ArvoreBinariadeBusca() {
 }
 
 ArvoreBinariadeBusca::~ArvoreBinariadeBusca() {
-    
+    deletarArvore(raiz);
 }
 
 void ArvoreBinariadeBusca:: deletarArvore(No* noAtual) {
-
+    if (noAtual != NULL) {
+        //Primeiro deleta o filho a esquerda
+        deletarArvore(noAtual->filhoesquerda);
+        
+        //Depois deleta o filho a direita
+        deletarArvore(noAtual->filhodireita);
+        
+        //Por último deleta o nó atual
+        delete noAtual;
+    }
 }
 
 No* ArvoreBinariadeBusca::obterRaiz() {
@@ -184,13 +193,41 @@ void ArvoreBinariadeBusca::buscar(Aluno& aluno, bool& encontrado) {
 }
 
 void ArvoreBinariadeBusca::imprimirEmOrdem(No* noAtual) {
-    
+    if (noAtual != NULL) {
+        //Primeiro imprime o filho a esquerda
+        imprimirEmOrdem(noAtual->filhoesquerda);
+        
+        //Depois imprime o nó atual
+        cout << noAtual->aluno.getNome() << ": " << noAtual->aluno.getMatricula() << endl;
+        
+        //Por último imprime o filho a direita
+        imprimirEmOrdem(noAtual->filhodireita);
+    }
 }
 
 void ArvoreBinariadeBusca::imprimirPreOrdem(No* noAtual) {
-    
+    if (noAtual != NULL) {
+        //Primeiro imprime o nó atual
+        cout << noAtual->aluno.getNome() << ": " << noAtual->aluno.getMatricula() << endl;
+        
+        //Depois imprime o filho a esquerda
+        imprimirPreOrdem(noAtual->filhoesquerda);
+        
+        //Por último imprime o filho a direita
+        imprimirPreOrdem(noAtual->filhodireita);
+    }
 }
 
 void ArvoreBinariadeBusca::imprimirPosOrdem(No* noAtual) {
+    if (noAtual != NULL) {
+        //Primeiro imprime o filho a esquerda
+        imprimirPosOrdem(noAtual->filhoesquerda);
+        
+        //Depois imprime o filho a direita
+        imprimirPosOrdem(noAtual->filhodireita);
+        
+        //Por último imprime o nó atual
+        cout << noAtual->aluno.getNome() << ": " << noAtual->aluno.getMatricula() << endl;
+    }
     
 }
